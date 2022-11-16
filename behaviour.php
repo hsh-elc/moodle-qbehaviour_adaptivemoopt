@@ -46,6 +46,10 @@ class qbehaviour_adaptivemoopt extends question_behaviour_with_multiple_tries {
         return parent::get_expected_data();
     }
 
+    public function get_min_fraction() {
+        return $this->question->get_min_fraction();
+    }
+
     //not moopt specific
     public function get_state_string($showcorrectness){
         $laststep = $this->qa->get_last_step();
@@ -264,13 +268,13 @@ class qbehaviour_adaptivemoopt extends question_behaviour_with_multiple_tries {
             // There wouldn't be a submit var if the answer has changed, cause the process_save() method saved it.
 
             $pendingstep->set_state(question_state::$finished);
-            $pendingstep->set_fraction(0);
+            $pendingstep->set_fraction($this->get_min_fraction());
 
         } else if (!$this->question->is_gradable_response($response)){
             // Case 3: $response is a different from the last graded response and unsubmitted but is not gradable
 
             $pendingstep->set_state(question_state::$gaveup);
-            $pendingstep->set_fraction(0);
+            $pendingstep->set_fraction($this->get_min_fraction());
 
         } else {
             // Case 4: $response is a different from the last graded response, submitted and gradable
